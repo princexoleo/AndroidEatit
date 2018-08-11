@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.app.leo.androideatit.Interface.ItemClickListner;
@@ -77,8 +78,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 
         Locale locale=new Locale("en","US");
         NumberFormat fmt=NumberFormat.getCurrencyInstance();
-
-        int price=(Integer.parseInt(listData.get(position).getPrice()))*(Integer.parseInt(listData.get(position).getQuantity()));
+        int price=0;
+        try{
+            price=(Integer.parseInt(listData.get(position).getPrice()))*(Integer.parseInt(listData.get(position).getQuantity()));
+        }catch (NumberFormatException e)
+        {
+            Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
         holder.txt_price.setText(fmt.format(price));
         holder.txt_cart_name.setText(listData.get(position).getProductName());

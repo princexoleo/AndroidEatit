@@ -57,6 +57,7 @@ public class Cart extends AppCompatActivity {
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+
         txtTotalPrice=findViewById(R.id.totalPriceCart);
         btnPlace=findViewById(R.id.btnPlaceOrder);
 
@@ -131,12 +132,14 @@ public class Cart extends AppCompatActivity {
         int total=0;
         for(Order order:cart)
         {
-            int price= Integer.parseInt(order.getPrice());
-            int quantity= Integer.parseInt(order.getQuantity());
 
-            total+= price*quantity;
 
-            //total+=((Integer.parseInt(order.getPrice()))*(Integer.parseInt(order.getQuantity())));
+            try {
+                total+=((Integer.parseInt(order.getPrice()))*(Integer.parseInt(order.getQuantity())));
+            }catch (NumberFormatException e)
+            {
+                Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
         Locale locale=new Locale("en","US");
         NumberFormat fmt=NumberFormat.getCurrencyInstance();
