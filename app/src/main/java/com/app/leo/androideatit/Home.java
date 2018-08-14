@@ -22,6 +22,7 @@ import com.app.leo.androideatit.Common.Common;
 import com.app.leo.androideatit.Interface.ItemClickListner;
 import com.app.leo.androideatit.Model.Category;
 import com.app.leo.androideatit.Model.Order;
+import com.app.leo.androideatit.Service.ListenOrder;
 import com.app.leo.androideatit.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -81,6 +82,11 @@ public class Home extends AppCompatActivity
 
 
         loadMenu();
+
+        //Register Services...
+
+        Intent service= new Intent(Home.this, ListenOrder.class);
+        startService(service);
 
     }
 

@@ -4,8 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
 
 import com.app.leo.androideatit.Common.Common;
+import com.app.leo.androideatit.Interface.ItemClickListner;
 import com.app.leo.androideatit.Model.Request;
 import com.app.leo.androideatit.ViewHolder.OrderViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -37,7 +40,19 @@ public class OrderStatus extends AppCompatActivity {
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        loadOrders(Common.currentUser.getPhone());
+
+
+        //if we start Orderstatus acctivity from Home
+        //we will not put any extra
+        if(getIntent()!=null)
+        {
+            loadOrders(getIntent().getStringExtra("userPhone"));
+
+        }
+            loadOrders(Common.currentUser.getPhone());
+
+
+
     }
 
     private void loadOrders(String phone) {
@@ -50,29 +65,28 @@ public class OrderStatus extends AppCompatActivity {
 
         ) {
             @Override
-            protected void populateViewHolder(OrderViewHolder viewHolder, Request model, int position) {
+            protected void populateViewHolder(final OrderViewHolder viewHolder, final Request model, int position) {
 
                 viewHolder.txtOrderId.setText(adapter.getRef(position).getKey());
-                viewHolder.txtOrderStatus.setText(convertCodeToStatus(model.getStatus()));
+                viewHolder.txtOrderStatus.setText(Common.convertCodeToStatus(model.getStatus()));
                 viewHolder.txtOrderAddress.setText(model.getAddress());
                 viewHolder.txtOrderPhone.setText(model.getPhone());
+
+               viewHolder.setItemClickListner(new ItemClickListner() {
+                   @Override
+                   public void onClick(View view, int position, boolean isLongClick) {
+                       //
+                       Toast.makeText(OrderStatus.this, "your order status is: "+Common.convertCodeToStatus(model.getStatus()), Toast.LENGTH_SHORT).show();
+                   }
+               });
             }
         };
         recyclerView.setAdapter(adapter);
 
     }
 
-    private String convertCodeToStatus(String status) {
-        if(status.equals("0"))
-        {
-            return "Placed";
-        }
-        else if (status.equals("1"))
-        {
-            return "On my way";
-        }
-        else {
-            return "Shipped";
-        }
-    }
+
+
+
+
 }
