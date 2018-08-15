@@ -3,7 +3,6 @@ package com.app.leo.androideatit;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,12 +20,12 @@ import android.widget.Toast;
 import com.app.leo.androideatit.Common.Common;
 import com.app.leo.androideatit.Interface.ItemClickListner;
 import com.app.leo.androideatit.Model.Category;
-import com.app.leo.androideatit.Model.Order;
-import com.app.leo.androideatit.Service.ListenOrder;
+import com.app.leo.androideatit.Model.Token;
 import com.app.leo.androideatit.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
 public class Home extends AppCompatActivity
@@ -83,10 +82,17 @@ public class Home extends AppCompatActivity
 
         loadMenu();
 
-        //Register Services...
+        updateToken(FirebaseInstanceId.getInstance().getToken());
 
-        Intent service= new Intent(Home.this, ListenOrder.class);
-        startService(service);
+
+    }
+
+    private void updateToken(String token) {
+        FirebaseDatabase db= FirebaseDatabase.getInstance();
+        DatabaseReference tokenRef= db.getReference("Tokens");
+
+        Token data=new Token(token,false);//false beacuse this token send from client
+        tokenRef.child(Common.currentUser.getPhone()).setValue(data);
 
     }
 

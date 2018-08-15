@@ -44,12 +44,16 @@ public class OrderStatus extends AppCompatActivity {
 
         //if we start Orderstatus acctivity from Home
         //we will not put any extra
-        if(getIntent()!=null)
+        if(getIntent().getExtras()==null)
+        {
+            loadOrders(Common.currentUser.getPhone());
+
+
+        }else
         {
             loadOrders(getIntent().getStringExtra("userPhone"));
-
         }
-            loadOrders(Common.currentUser.getPhone());
+
 
 
 
