@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.app.leo.androideatit.Home;
 import com.app.leo.androideatit.MainActivity;
 import com.app.leo.androideatit.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -26,12 +27,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService{
     private void sendNotification(RemoteMessage remoteMessage) {
 
         RemoteMessage.Notification notification= remoteMessage.getNotification();
-        Intent intent =new Intent(this, MainActivity.class);
+        Intent intent =new Intent(getBaseContext(), Home.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+        PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(),
                 0,
                 intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri =RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder= new NotificationCompat.Builder(this)
